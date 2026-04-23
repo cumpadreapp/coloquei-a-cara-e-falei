@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Admin - Coloquei a cara e Falei</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --verde-portal: #2e7d32;
+            --branco-portal: #ffffff;
+            --azul-portal: #1976d2;
+            --verde-claro: #4caf50;
+            --azul-claro: #42a5f5;
+            --cinza-bg: #f8f9fa;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #f0f2f5;
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
+        
+        /* Top Bar Fixa */
+        .top-bar {
+            background: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 12px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo-area h4 {
+            background: linear-gradient(135deg, var(--verde-portal), var(--azul-portal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+            margin: 0;
+            font-size: 1rem;
+        }
+        
+        .menu-mobile-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--verde-portal);
+            cursor: pointer;
+        }
+        
+        /* Sidebar melhorada */
+        .sidebar {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            width: 260px;
+            height: calc(100vh - 60px);
+            background: linear-gradient(180deg, var(--verde-portal) 0%, var(--azul-portal) 100%);
+            transition: all 0.3s ease;
+            z-index: 999;
+            overflow-y: auto;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .sidebar.collapsed {
+            left: -260px;
+        }
+        
+        .sidebar .nav {
+            padding: 20px 0;
+        }
+        
+        .sidebar .nav-link {
+            color: white;
+            padding: 12px 20px;
+            margin: 4px 12px;
+            border-radius: 12px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+        }
+        
+        .sidebar .nav-link i {
+            width: 24px;
+            font-size: 1.1rem;
+        }
+        
+        .sidebar .nav-link:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateX(5px);
+        }
+        
+        .sidebar .nav-link.active {
+            background: rgba(255,255,255,0.25);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        /* Conteúdo Principal */
+        .main-content {
+            margin-left: 260px;
+            margin-top: 70px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .main-content.full {
+            margin-left: 0;
+        }
+        
+        /* Cards de Estatísticas */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            border-left: 4px solid var(--verde-portal);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--verde-portal);
+            margin: 0;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.85rem;
+            margin: 0;
+        }
+        
+        /* Cards de Conteúdo */
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .card-header-custom {
+            background: linear-gradient(135deg, var(--verde-portal), var(--azul-portal));
+            color: white;
+            padding: 15px 20px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        /* Lista de Postagens */
+        .postagens-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .postagem-item {
+            background: white;
+            border-bottom: 1px solid #eee;
+            padding: 15px 20px;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .postagem-item:hover {
+            background: #f8f9fa;
+        }
+        
+        .postagem-info {
+            flex: 1;
+        }
+        
+        .postagem-titulo-admin {
+            font-weight: 600;
+            color: var(--verde-portal);
+            margin: 0 0 5px 0;
+        }
+        
+        .postagem-meta {
+            font-size: 0.75rem;
+            color: #888;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .postagem-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn-delete {
+            background: #dc3545;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            color: white;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+        
+        .btn-delete:hover {
+            background: #c82333;
+            transform: scale(1.05);
+        }
+        
+        /* Comentários */
+        .comentario-item-admin {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .comentario-texto {
+            flex: 1;
+        }
+        
+        .comentario-nome {
+            font-weight: 600;
+            color: var(--verde-portal);
+        }
+        
+        /* Formulário */
+        .form-moderno {
+            padding: 20px;
+        }
+        
+        .form-moderno .form-control, 
+        .form-moderno .form-select {
+            border-radius: 12px;
+            border: 1px solid #ddd;
+            padding: 10px 15px;
+            transition: all 0.2s;
+        }
+        
+        .form-moderno .form-control:focus,
+        .form-moderno .form-select:focus {
+            border-color: var(--verde-portal);
+            box-shadow: 0 0 0 3px rgba(46,125,50,0.1);
+        }
+        
+        .btn-admin-primary {
+            background: linear-gradient(135deg, var(--verde-portal), var(--azul-portal));
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-admin-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46,125,50,0.3);
+        }
+        
+        .preview-area {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            display: none;
+        }
+        
+        .preview-area img, .preview-area video {
+            max-width: 100%;
+            border-radius: 12px;
+            max-height: 200px;
+        }
+        
+        /* Banner Preview */
+        .banner-preview-area {
+            background: #f8f9fa;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .banner-preview-img {
+            max-width: 100%;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border: 2px solid var(--verde-portal);
+        }
+        
+        /* Overlay para mobile */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 998;
+        }
+        
+        .sidebar-overlay.active {
+            display: block;
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--verde-portal);
+            border-radius: 10px;
+        }
+        
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .menu-mobile-btn {
+                display: block;
+            }
+            
+            .sidebar {
+                left: -260px;
+            }
+            
+            .sidebar.mobile-open {
+                left: 0;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                margin-top: 60px;
+                padding: 15px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+            
+            .stat-number {
+                font-size: 1.5rem;
+            }
+            
+            .postagem-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .postagem-actions {
+                align-self: flex-end;
+            }
+            
+            .card-header-custom {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Animações */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .content-card {
+            animation: fadeIn 0.3s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="logo-area">
+            <h4><i class="fas fa-crown"></i> Admin - Coloquei a cara e Falei</h4>
+        </div>
+        <div>
+            <button class="menu-mobile-btn" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <a href="/home" class="btn btn-sm btn-outline-success ms-2 d-none d-md-inline">
+                <i class="fas fa-home"></i> Ver Portal
+            </a>
+            <a href="/logout" class="btn btn-sm btn-danger ms-2">
+                <i class="fas fa-sign-out-alt"></i> Sair
+            </a>
+        </div>
+    </div>
+    
+    <!-- Overlay mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <nav class="nav flex-column">
+            <a class="nav-link active" href="#" onclick="mostrarAba('dashboard')">
+                <i class="fas fa-chart-line"></i> Dashboard
+            </a>
+            <a class="nav-link" href="#" onclick="mostrarAba('postagens')">
+                <i class="fas fa-newspaper"></i> Postagens
+            </a>
+            <a class="nav-link" href="#" onclick="mostrarAba('comentarios')">
+                <i class="fas fa-comments"></i> Comentários
+            </a>
+            <a class="nav-link" href="#" onclick="mostrarAba('banner')">
+                <i class="fas fa-image"></i> Banner
+            </a>
+            <a class="nav-link" href="#" onclick="mostrarAba('nova')">
+                <i class="fas fa-plus-circle"></i> Nova Postagem
+            </a>
+            <hr class="mx-3 my-2" style="background: rgba(255,255,255,0.2);">
+            <a class="nav-link" href="/home">
+                <i class="fas fa-home"></i> Ver Portal
+            </a>
+            <a class="nav-link" href="/logout">
+                <i class="fas fa-sign-out-alt"></i> Sair
+            </a>
+        </nav>
+    </div>
+    
+    <!-- Conteúdo Principal -->
+    <div class="main-content" id="mainContent">
+        <!-- Aba Dashboard -->
+        <div id="aba-dashboard">
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-card">
+                    <p class="stat-number" id="totalPostagens">0</p>
+                    <p class="stat-label">Total de Postagens</p>
+                </div>
+                <div class="stat-card">
+                    <p class="stat-number" id="totalComentarios">0</p>
+                    <p class="stat-label">Total de Comentários</p>
+                </div>
+                <div class="stat-card">
+                    <p class="stat-number" id="totalVistas">0</p>
+                    <p class="stat-label">Total de Observações</p>
+                </div>
+                <div class="stat-card">
+                    <p class="stat-number" id="totalUsuarios">0</p>
+                    <p class="stat-label">Usuários Cadastrados</p>
+                </div>
+            </div>
+            
+            <div class="content-card">
+                <div class="card-header-custom">
+                    <span><i class="fas fa-clock"></i> Últimas Postagens</span>
+                    <button class="btn btn-sm btn-light" onclick="carregarPostagens()">
+                        <i class="fas fa-sync-alt"></i> Atualizar
+                    </button>
+                </div>
+                <div class="postagens-list" id="ultimasPostagens"></div>
+            </div>
+        </div>
+        
+        <!-- Aba Postagens -->
+        <div id="aba-postagens" style="display: none;">
+            <div class="content-card">
+                <div class="card-header-custom">
+                    <span><i class="fas fa-newspaper"></i> Todas as Postagens</span>
+                    <button class="btn btn-sm btn-light" onclick="carregarPostagens()">
+                        <i class="fas fa-sync-alt"></i> Atualizar
+                    </button>
+                </div>
+                <div class="postagens-list" id="lista-postagens"></div>
+            </div>
+        </div>
+        
+        <!-- Aba Comentários -->
+        <div id="aba-comentarios" style="display: none;">
+            <div class="content-card">
+                <div class="card-header-custom">
+                    <span><i class="fas fa-comments"></i> Todos os Comentários</span>
+                    <button class="btn btn-sm btn-light" onclick="carregarComentarios()">
+                        <i class="fas fa-sync-alt"></i> Atualizar
+                    </button>
+                </div>
+                <div style="padding: 20px; max-height: 500px; overflow-y: auto;" id="lista-comentarios"></div>
+            </div>
+        </div>
+        
+        <!-- Aba Banner -->
+        <div id="aba-banner" style="display: none;">
+            <div class="content-card">
+                <div class="card-header-custom">
+                    <span><i class="fas fa-image"></i> Banner do Portal</span>
+                </div>
+                <div class="form-moderno">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Banner Atual</label>
+                            <div class="banner-preview-area">
+                                <img id="banner-preview" src="{{ banner_url }}" class="banner-preview-img" style="max-width: 100%;">
+                                <p class="text-muted small mt-2">Banner atual do portal</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Alterar Banner</label>
+                            <input type="file" class="form-control" id="banner-input" accept="image/jpeg,image/png,image/jpg,image/gif,image/webp">
+                            <small class="text-muted">Formatos: JPG, PNG, GIF, WEBP. Tamanho recomendado: 1200x300px</small>
+                            <div id="novo-banner-preview" class="mt-3" style="display: none;">
+                                <div class="banner-preview-area">
+                                    <img id="preview-img" style="max-width: 100%; border-radius: 12px;">
+                                    <p class="text-success small mt-2">✓ Novo banner selecionado</p>
+                                </div>
+                            </div>
+                            <button class="btn btn-admin-primary mt-3" onclick="uploadBanner()">
+                                <i class="fas fa-upload"></i> Salvar Banner
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Aba Nova Postagem -->
+        <div id="aba-nova" style="display: none;">
+            <div class="content-card">
+                <div class="card-header-custom">
+                    <span><i class="fas fa-edit"></i> Criar Nova Postagem</span>
+                </div>
+                <div class="form-moderno">
+                    <form id="form-postagem" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Título da Postagem</label>
+                            <input type="text" class="form-control" id="titulo" required placeholder="Digite um título atraente...">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Resumo</label>
+                            <textarea class="form-control" id="resumo" rows="2" required placeholder="Um breve resumo da postagem..."></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Tipo de Conteúdo</label>
+                            <select class="form-select" id="tipo" onchange="mudarTipo()">
+                                <option value="texto">📝 Texto</option>
+                                <option value="foto">🖼️ Foto (upload local)</option>
+                                <option value="video_local">🎥 Vídeo Local (upload)</option>
+                                <option value="video_youtube">📺 Vídeo YouTube (link)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3" id="campo-conteudo">
+                            <label class="form-label fw-bold">Conteúdo de Texto</label>
+                            <textarea class="form-control" id="conteudo" rows="6" placeholder="Digite o conteúdo da postagem..."></textarea>
+                        </div>
+                        
+                        <div class="mb-3" id="campo-url" style="display: none;">
+                            <label class="form-label fw-bold">URL do Vídeo YouTube</label>
+                            <input type="text" class="form-control" id="url" placeholder="https://www.youtube.com/embed/...">
+                            <small class="text-muted">Exemplo: https://www.youtube.com/embed/dQw4w9WgXcQ</small>
+                        </div>
+                        
+                        <div class="mb-3" id="campo-arquivo" style="display: none;">
+                            <label class="form-label fw-bold">Arquivo Local</label>
+                            <input type="file" class="form-control" id="arquivo" accept="">
+                            <small class="text-muted" id="info-arquivo">Selecione uma imagem ou vídeo do seu dispositivo</small>
+                            <div id="preview-arquivo" class="preview-area"></div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-admin-primary">
+                            <i class="fas fa-save"></i> Publicar Postagem
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de Confirmação -->
+    <div class="modal fade" id="confirmModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-exclamation-triangle text-warning"></i> Confirmar exclusão</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Tem certeza que deseja excluir este item?</p>
+                    <p class="text-danger small">Esta ação não pode ser desfeita!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="confirmar-exclusao">Excluir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let itemParaExcluir = null;
+        let tipoExclusao = null;
+        
+        // Menu Mobile
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        const mainContent = document.getElementById('mainContent');
+        
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('mobile-open');
+            overlay.classList.toggle('active');
+        });
+        
+        overlay.addEventListener('click', () => {
+            sidebar.classList.remove('mobile-open');
+            overlay.classList.remove('active');
+        });
+        
+        function mostrarAba(aba) {
+            document.getElementById('aba-dashboard').style.display = 'none';
+            document.getElementById('aba-postagens').style.display = 'none';
+            document.getElementById('aba-comentarios').style.display = 'none';
+            document.getElementById('aba-banner').style.display = 'none';
+            document.getElementById('aba-nova').style.display = 'none';
+            
+            document.getElementById(`aba-${aba}`).style.display = 'block';
+            
+            document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            sidebar.classList.remove('mobile-open');
+            overlay.classList.remove('active');
+            
+            if (aba === 'dashboard') carregarDashboard();
+            if (aba === 'postagens') carregarPostagens();
+            if (aba === 'comentarios') carregarComentarios();
+        }
+        
+        function carregarDashboard() {
+            Promise.all([
+                fetch('/admin/api/postagens').then(r => r.json()),
+                fetch('/admin/api/comentarios').then(r => r.json())
+            ]).then(([postagens, comentarios]) => {
+                let totalVistas = 0;
+                postagens.forEach(p => totalVistas += p.total_vistas);
+                
+                document.getElementById('totalPostagens').innerText = postagens.length;
+                document.getElementById('totalComentarios').innerText = comentarios.length;
+                document.getElementById('totalVistas').innerText = totalVistas;
+                document.getElementById('totalUsuarios').innerText = '?';
+                
+                const container = document.getElementById('ultimasPostagens');
+                container.innerHTML = '';
+                postagens.slice(0, 5).forEach(post => {
+                    const div = document.createElement('div');
+                    div.className = 'postagem-item';
+                    div.innerHTML = `
+                        <div class="postagem-info">
+                            <div class="postagem-titulo-admin">${escapeHtml(post.titulo)}</div>
+                            <div class="postagem-meta">
+                                <span><i class="far fa-calendar-alt"></i> ${post.data}</span>
+                                <span><i class="fas fa-eye"></i> ${post.total_vistas} observações</span>
+                                <span><i class="fas fa-comment"></i> ${post.total_comentarios} comentários</span>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+                
+                if (postagens.length === 0) {
+                    container.innerHTML = '<div class="text-center p-4 text-muted">Nenhuma postagem ainda</div>';
+                }
+            });
+        }
+        
+        function carregarPostagens() {
+            fetch('/admin/api/postagens')
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('lista-postagens');
+                    container.innerHTML = '';
+                    
+                    if (data.length === 0) {
+                        container.innerHTML = '<div class="text-center p-4 text-muted">Nenhuma postagem encontrada</div>';
+                        return;
+                    }
+                    
+                    data.forEach(post => {
+                        let tipoIcon = '';
+                        let tipoCor = '';
+                        if (post.tipo === 'texto') { tipoIcon = '📝'; tipoCor = '#17a2b8'; }
+                        else if (post.tipo === 'foto') { tipoIcon = '🖼️'; tipoCor = '#28a745'; }
+                        else if (post.tipo === 'video_local') { tipoIcon = '🎥'; tipoCor = '#dc3545'; }
+                        else if (post.tipo === 'video_youtube') { tipoIcon = '📺'; tipoCor = '#ffc107'; }
+                        
+                        const div = document.createElement('div');
+                        div.className = 'postagem-item';
+                        div.innerHTML = `
+                            <div class="postagem-info">
+                                <div class="postagem-titulo-admin">
+                                    ${tipoIcon} ${escapeHtml(post.titulo)}
+                                    <span style="color: ${tipoCor}; font-size: 0.7rem; margin-left: 8px;">${post.tipo}</span>
+                                </div>
+                                <div class="postagem-meta">
+                                    <span><i class="far fa-calendar-alt"></i> ${post.data}</span>
+                                    <span><i class="fas fa-eye"></i> ${post.total_vistas} observações</span>
+                                    <span><i class="fas fa-comment"></i> ${post.total_comentarios} comentários</span>
+                                </div>
+                            </div>
+                            <div class="postagem-actions">
+                                <button class="btn-delete" onclick="excluirPostagem(${post.id})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        `;
+                        container.appendChild(div);
+                    });
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    document.getElementById('lista-postagens').innerHTML = '<div class="text-center p-4 text-danger">Erro ao carregar postagens</div>';
+                });
+        }
+        
+        function carregarComentarios() {
+            fetch('/admin/api/comentarios')
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('lista-comentarios');
+                    container.innerHTML = '';
+                    
+                    if (data.length === 0) {
+                        container.innerHTML = '<div class="text-center p-4 text-muted">Nenhum comentário ainda</div>';
+                        return;
+                    }
+                    
+                    data.forEach(com => {
+                        const div = document.createElement('div');
+                        div.className = 'comentario-item-admin';
+                        div.innerHTML = `
+                            <div class="comentario-texto">
+                                <div class="comentario-nome">
+                                    <i class="fas fa-user"></i> ${escapeHtml(com.usuario_nome)}
+                                    <span class="text-muted" style="font-size: 0.7rem;"> • ${com.data}</span>
+                                </div>
+                                <div class="mt-1">Postagem #${com.postagem_id}</div>
+                                <div class="mt-2">${escapeHtml(com.texto)}</div>
+                            </div>
+                            <button class="btn-delete" onclick="excluirComentario(${com.id})" style="align-self: center;">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        `;
+                        container.appendChild(div);
+                    });
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    document.getElementById('lista-comentarios').innerHTML = '<div class="text-center p-4 text-danger">Erro ao carregar comentários</div>';
+                });
+        }
+        
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function excluirPostagem(id) {
+            itemParaExcluir = id;
+            tipoExclusao = 'postagem';
+            new bootstrap.Modal(document.getElementById('confirmModal')).show();
+        }
+        
+        function excluirComentario(id) {
+            itemParaExcluir = id;
+            tipoExclusao = 'comentario';
+            new bootstrap.Modal(document.getElementById('confirmModal')).show();
+        }
+        
+        document.getElementById('confirmar-exclusao').onclick = function() {
+            if (tipoExclusao === 'postagem') {
+                fetch(`/admin/api/postagem/${itemParaExcluir}`, { method: 'DELETE' })
+                    .then(() => {
+                        carregarPostagens();
+                        carregarDashboard();
+                        bootstrap.Modal.getInstance(document.getElementById('confirmModal')).hide();
+                    });
+            } else if (tipoExclusao === 'comentario') {
+                fetch(`/admin/api/comentario/${itemParaExcluir}`, { method: 'DELETE' })
+                    .then(() => {
+                        carregarComentarios();
+                        carregarDashboard();
+                        bootstrap.Modal.getInstance(document.getElementById('confirmModal')).hide();
+                    });
+            }
+        };
+        
+        document.getElementById('banner-input').onchange = function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const previewDiv = document.getElementById('novo-banner-preview');
+                    const previewImg = document.getElementById('preview-img');
+                    previewImg.src = event.target.result;
+                    previewDiv.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+        
+        function uploadBanner() {
+            const arquivo = document.getElementById('banner-input').files[0];
+            if (!arquivo) {
+                alert('Selecione um banner primeiro!');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('banner', arquivo);
+            
+            fetch('/admin/api/banner', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Banner atualizado com sucesso!');
+                    document.getElementById('banner-preview').src = data.banner_url + '?t=' + Date.now();
+                    document.getElementById('novo-banner-preview').style.display = 'none';
+                    document.getElementById('banner-input').value = '';
+                } else {
+                    alert('Erro ao atualizar banner: ' + (data.error || 'Tente novamente'));
+                }
+            })
+            .catch(error => {
+                alert('Erro ao enviar banner: ' + error);
+            });
+        }
+        
+        function mudarTipo() {
+            const tipo = document.getElementById('tipo').value;
+            const campoConteudo = document.getElementById('campo-conteudo');
+            const campoUrl = document.getElementById('campo-url');
+            const campoArquivo = document.getElementById('campo-arquivo');
+            const inputArquivo = document.getElementById('arquivo');
+            const infoArquivo = document.getElementById('info-arquivo');
+            const previewDiv = document.getElementById('preview-arquivo');
+            
+            campoConteudo.style.display = 'none';
+            campoUrl.style.display = 'none';
+            campoArquivo.style.display = 'none';
+            previewDiv.style.display = 'none';
+            
+            if (tipo === 'texto') {
+                campoConteudo.style.display = 'block';
+            } else if (tipo === 'video_youtube') {
+                campoUrl.style.display = 'block';
+            } else if (tipo === 'foto') {
+                campoArquivo.style.display = 'block';
+                inputArquivo.accept = 'image/*';
+                infoArquivo.innerHTML = 'Selecione uma imagem (JPG, PNG, GIF, WEBP) - máximo 16MB';
+            } else if (tipo === 'video_local') {
+                campoArquivo.style.display = 'block';
+                inputArquivo.accept = 'video/*';
+                infoArquivo.innerHTML = 'Selecione um vídeo (MP4, WebM, AVI, MOV) - máximo 100MB';
+            }
+            
+            inputArquivo.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        previewDiv.style.display = 'block';
+                        if (tipo === 'foto') {
+                            previewDiv.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
+                        } else if (tipo === 'video_local') {
+                            previewDiv.innerHTML = `<video controls src="${event.target.result}"></video>`;
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+        }
+        
+        document.getElementById('form-postagem').onsubmit = async function(e) {
+            e.preventDefault();
+            
+            const tipo = document.getElementById('tipo').value;
+            const titulo = document.getElementById('titulo').value;
+            const resumo = document.getElementById('resumo').value;
+            
+            if (!titulo || !resumo) {
+                alert('Preencha título e resumo!');
+                return;
+            }
+            
+            if (tipo === 'foto' || tipo === 'video_local') {
+                const arquivo = document.getElementById('arquivo').files[0];
+                if (!arquivo) {
+                    alert('Por favor, selecione um arquivo!');
+                    return;
+                }
+                
+                const formData = new FormData();
+                formData.append('arquivo', arquivo);
+                formData.append('tipo', tipo);
+                formData.append('titulo', titulo);
+                formData.append('resumo', resumo);
+                
+                const response = await fetch('/admin/api/postagem', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    alert('Postagem criada com sucesso!');
+                    this.reset();
+                    document.getElementById('preview-arquivo').style.display = 'none';
+                    mostrarAba('postagens');
+                } else {
+                    alert('Erro ao criar postagem');
+                }
+            } else {
+                let conteudo = '';
+                if (tipo === 'texto') {
+                    conteudo = document.getElementById('conteudo').value;
+                    if (!conteudo) {
+                        alert('Digite o conteúdo da postagem!');
+                        return;
+                    }
+                } else if (tipo === 'video_youtube') {
+                    conteudo = document.getElementById('url').value;
+                    if (!conteudo) {
+                        alert('Digite a URL do vídeo!');
+                        return;
+                    }
+                }
+                
+                const data = {
+                    titulo: titulo,
+                    resumo: resumo,
+                    tipo: tipo,
+                    conteudo: conteudo
+                };
+                
+                const response = await fetch('/admin/api/postagem', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    alert('Postagem criada com sucesso!');
+                    this.reset();
+                    mostrarAba('postagens');
+                } else {
+                    alert('Erro ao criar postagem');
+                }
+            }
+        };
+        
+        carregarDashboard();
+    </script>
+</body>
+</html>
