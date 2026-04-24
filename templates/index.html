@@ -3,564 +3,306 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
- 
+    <title>Coloquei a cara e Falei - Entre com sua foto</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --verde-portal: #2e7d32;
-            --branco-portal: #ffffff;
             --azul-portal: #1976d2;
-            --verde-claro: #4caf50;
-            --azul-claro: #42a5f5;
-            --verde-escuro: #1b5e20;
-            --azul-escuro: #0d47a1;
         }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             background: linear-gradient(135deg, #f5f7fa 0%, #e8edf2 100%);
-            min-height: 100vh;
-            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            position: relative;
+            font-family: 'Poppins', sans-serif;
         }
-        
-        /* Banner fixo no topo */
         .banner-fixo {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            background: white;
-            box-shadow: 0 4px 25px rgba(0,0,0,0.1);
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: white; box-shadow: 0 4px 25px rgba(0,0,0,0.1);
         }
-        
-        .banner-imagem {
-            width: 100%;
-            height: auto;
-            max-height: 180px;
-            object-fit: cover;
-            display: block;
-        }
-        
-        /* Espaçamento para compensar o banner fixo */
-        .main-content {
-            padding-top: 200px;
-        }
-        
-        @media (max-width: 768px) {
-            .main-content {
-                padding-top: 160px;
-            }
-        }
-        
-        /* Card de entrada moderno */
+        .banner-imagem { width: 100%; max-height: 180px; object-fit: cover; }
+        .main-content { padding-top: 200px; }
+        @media (max-width: 768px) { .main-content { padding-top: 160px; } }
         .card-entrada {
-            background: rgba(255, 255, 255, 0.98);
-            border-radius: 28px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.12);
-            border: none;
-            transition: transform 0.3s, box-shadow 0.3s;
-            overflow: hidden;
+            background: rgba(255,255,255,0.98); border-radius: 28px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.12); overflow: hidden;
         }
-        
-        .card-entrada:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
-        }
-        
-        /* Header do card com gradiente */
         .card-header-gradient {
             background: linear-gradient(135deg, var(--verde-portal), var(--azul-portal));
-            padding: 20px 25px;
-            text-align: center;
-            color: white;
+            padding: 20px; text-align: center; color: white;
         }
-        
-        .card-header-gradient h2 {
-            font-weight: 700;
-            margin: 0;
-            font-size: 1.5rem;
-        }
-        
-        .card-header-gradient p {
-            margin: 5px 0 0;
-            opacity: 0.9;
-            font-size: 0.85rem;
-        }
-        
-        /* Visualização da câmera */
+        .card-header-gradient h2 { font-weight: 700; font-size: 1.5rem; }
         .camera-area {
-            background: #000;
-            border-radius: 20px;
-            overflow: hidden;
+            background: #000; border-radius: 20px; overflow: hidden;
+            min-height: 250px; display: flex; align-items: center; justify-content: center;
             position: relative;
-            margin-bottom: 20px;
-            min-height: 250px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
-        
-        #video {
-            width: 100%;
-            max-height: 350px;
-            object-fit: cover;
-            display: block;
-        }
-        
+        #video { width: 100%; max-height: 350px; object-fit: cover; }
         .camera-placeholder {
-            padding: 50px 20px;
-            text-align: center;
+            padding: 50px 20px; text-align: center;
             background: linear-gradient(135deg, #1a1a2e, #16213e);
-            color: white;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-            width: 100%;
+            color: white; border-radius: 20px; cursor: pointer; width: 100%;
         }
-        
-        .camera-placeholder:hover {
-            background: linear-gradient(135deg, #16213e, #0f3460);
-            transform: scale(1.02);
-        }
-        
-        .camera-placeholder i {
-            font-size: 50px;
-            margin-bottom: 10px;
-            color: var(--verde-claro);
-        }
-        
-        .camera-placeholder h5 {
-            font-size: 1.1rem;
-        }
-        
         .btn-camera-moderno {
             background: linear-gradient(135deg, var(--verde-portal), var(--azul-portal));
-            border: none;
-            padding: 12px 28px;
-            font-size: 1rem;
-            border-radius: 50px;
-            color: white;
-            transition: all 0.3s;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            width: 100%;
-            margin-top: 10px;
+            border: none; padding: 12px 28px; border-radius: 50px; color: white;
+            font-weight: 600; width: 100%; margin-top: 10px;
         }
-        
-        .btn-camera-moderno:hover {
-            transform: scale(1.02);
-            color: white;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-        
-        .avatar-preview {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid var(--verde-portal);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-        
-        /* Seção da câmera */
-        .secao-camera {
-            background: linear-gradient(135deg, #f8f9fa, #fff);
-            border-radius: 20px;
-            padding: 20px;
-            margin-top: 20px;
-            border: 1px solid rgba(0,0,0,0.05);
-        }
-        
-        .secao-camera-titulo {
-            text-align: center;
-            margin-bottom: 15px;
-        }
-        
-        .secao-camera-titulo h5 {
-            color: var(--verde-portal);
-            font-weight: 600;
-        }
-        
-        /* Última postagem COMPLETA */
+        .avatar-preview { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid var(--verde-portal); }
         .ultima-postagem {
-            background: linear-gradient(135deg, #fff, #fefefe);
-            border-radius: 20px;
-            padding: 0;
-            overflow: hidden;
-            border: 1px solid rgba(0,0,0,0.05);
-            transition: all 0.3s;
-            margin-bottom: 20px;
+            background: white; border-radius: 20px; overflow: hidden;
+            margin-bottom: 20px; border: 1px solid rgba(0,0,0,0.05);
         }
-        
-        .ultima-postagem:hover {
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-        }
-        
         .ultima-postagem-header {
-            padding: 15px 20px;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: white;
+            padding: 15px 20px; border-bottom: 1px solid #eee;
+            display: flex; align-items: center; gap: 12px;
         }
-        
-        .ultima-postagem-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--verde-portal);
-        }
-        
-        .ultima-postagem-titulo {
-            color: var(--verde-portal);
-            font-weight: 700;
-            font-size: 1.1rem;
-            margin: 0;
-        }
-        
-        .ultima-postagem-meta {
-            font-size: 0.65rem;
-            color: #888;
-        }
-        
-        .ultima-postagem-resumo {
-            padding: 12px 20px;
-            background: #fafafa;
-            font-size: 0.85rem;
-            color: #666;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .ultima-postagem-conteudo {
-            padding: 15px 20px;
-        }
-        
-        .ultima-postagem-midia {
-            max-width: 100%;
-            border-radius: 12px;
-            margin: 10px 0;
-        }
-        
-        .ultima-postagem-video {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            overflow: hidden;
-            border-radius: 12px;
-            background: #000;
-        }
-        
-        .ultima-postagem-video iframe,
-        .ultima-postagem-video video {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        
-        .badge-destaque {
-            background: linear-gradient(135deg, var(--verde-portal), var(--azul-portal));
-            color: white;
-            padding: 3px 10px;
-            border-radius: 30px;
-            font-size: 0.65rem;
-            display: inline-block;
-            margin-bottom: 8px;
-        }
-        
-        .cadeado-icon {
-            color: #ffc107;
-            margin-right: 5px;
-        }
-        
+        .ultima-postagem-avatar { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid var(--verde-portal); }
+        .ultima-postagem-titulo { color: var(--verde-portal); font-weight: 700; font-size: 1.1rem; margin: 0; }
         .alert-login {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            border-radius: 12px;
-            padding: 12px 15px;
-            margin: 10px 20px 15px 20px;
-            font-size: 0.8rem;
+            background: #fff3cd; border-left: 4px solid #ffc107;
+            border-radius: 12px; padding: 12px 15px; margin: 10px 20px 15px; font-size: 0.8rem;
         }
-        
-        /* Info box simplificada */
-        .info-box-simplificado {
-            background: linear-gradient(135deg, #f0f4f8, #e8edf2);
-            border-radius: 16px;
-            padding: 15px;
-            margin-top: 15px;
-            text-align: center;
+        .secao-camera {
+            background: #f8f9fa; border-radius: 20px; padding: 20px;
+            margin-top: 20px; border: 1px solid rgba(0,0,0,0.05);
         }
-        
-        .info-box-simplificado small {
-            font-size: 0.7rem;
-        }
-        
-        .feature-mini {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-top: 8px;
-        }
-        
-        .feature-mini span {
-            font-size: 0.7rem;
-            background: white;
-            padding: 4px 10px;
-            border-radius: 20px;
-        }
-        
-        .feature-mini i {
-            color: var(--verde-portal);
-            margin-right: 4px;
-        }
-        
-        .loading {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 9999;
-        }
-        
-        .btn-confirmar {
-            background: linear-gradient(135deg, var(--verde-portal), var(--azul-portal));
-            border: none;
-            padding: 10px 24px;
-            border-radius: 50px;
-            color: white;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        
-        .btn-confirmar:hover {
-            transform: scale(1.05);
-        }
-        
-        /* Animação de pulso */
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(46, 125, 50, 0.4);
-            }
-            70% {
-                box-shadow: 0 0 0 15px rgba(46, 125, 50, 0);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(46, 125, 50, 0);
-            }
-        }
-        
-        .animated-border {
-            animation: pulse 2s infinite;
-            display: inline-block;
-            border-radius: 50%;
-        }
-        
-        /* Indicador de câmera ativa */
-        .camera-indicator {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.6);
-            color: white;
-            padding: 4px 8px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            z-index: 10;
-        }
-        
-        .camera-indicator i {
-            color: #ff4444;
-            animation: blink 1s infinite;
-        }
-        
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-        
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: var(--verde-portal);
-            border-radius: 10px;
-        }
-        
-        @media (max-width: 768px) {
-            .card-header-gradient h2 {
-                font-size: 1.2rem;
-            }
-            
-            .ultima-postagem-header {
-                padding: 12px 15px;
-            }
-            
-            .ultima-postagem-titulo {
-                font-size: 0.95rem;
-            }
-            
-            .ultima-postagem-resumo {
-                font-size: 0.75rem;
-                padding: 10px 15px;
-            }
-            
-            .ultima-postagem-conteudo {
-                padding: 10px 15px;
-            }
-            
-            .secao-camera {
-                padding: 15px;
-            }
+        .loading { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(46,125,50,0.4); } 70% { box-shadow: 0 0 0 15px rgba(46,125,50,0); } 100% { box-shadow: 0 0 0 0 rgba(46,125,50,0); } }
+        .animated-border { animation: pulse 2s infinite; display: inline-block; border-radius: 50%; }
+        .camera-indicator { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.6); color: white; padding: 4px 8px; border-radius: 20px; font-size: 0.7rem; z-index: 10; }
+        @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+        .camera-indicator i { color: #ff4444; animation: blink 1s infinite; }
+        .reconhecendo-msg {
+            position: absolute; bottom: 10px; left: 0; right: 0; text-align: center;
+            background: rgba(0,0,0,0.6); color: white; padding: 5px; font-size: 0.8rem; border-radius: 0 0 20px 20px;
         }
     </style>
 </head>
 <body>
-    <!-- Banner Fixo -->
-    <div class="banner-fixo">
-        <img src="{{ banner_url }}" class="banner-imagem" alt="Banner" id="banner-img">
-    </div>
-    
+    <div class="banner-fixo"><img src="{{ banner_url }}" class="banner-imagem" id="banner-img"></div>
     <div class="container main-content">
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <!-- Card de Entrada -->
                 <div class="card-entrada">
                     <div class="card-header-gradient">
-                        <div class="animated-border d-inline-block mb-1">
-                            <i class="fas fa-camera-retro" style="font-size: 30px;"></i>
-                        </div>
+                        <div class="animated-border d-inline-block mb-1"><i class="fas fa-camera-retro" style="font-size: 30px;"></i></div>
                         <h2>Coloquei a cara e Falei</h2>
-                        <p>Olhe para a câmera e tire sua foto</p>
+                        <p>Olhe para a câmera - reconhecimento automático</p>
                     </div>
-                    
                     <div class="p-4">
-                        <!-- Última Postagem COMPLETA (PRIMEIRO) -->
-                        <div id="ultima-postagem">
-                            <div class="text-center p-4">
-                                <div class="spinner-border text-success" role="status">
-                                    <span class="visually-hidden">Carregando...</span>
-                                </div>
-                                <p class="mt-2 text-muted">Carregando última novidade...</p>
-                            </div>
-                        </div>
-                        
-                        <!-- Seção da Câmera (DEPOIS DA POSTAGEM) -->
+                        <div id="ultima-postagem"><div class="text-center p-4"><div class="spinner-border text-success"></div><p class="mt-2">Carregando...</p></div></div>
                         <div class="secao-camera">
-                            <div class="secao-camera-titulo">
-                                <i class="fas fa-camera" style="color: var(--verde-portal); font-size: 24px;"></i>
-                                <h5>📸 Coloque a cara aqui</h5>
-                                <small class="text-muted">A câmera já está ativa, tire sua foto</small>
-                            </div>
-                            
-                            <!-- Área da Câmera -->
+                            <div class="text-center mb-3"><i class="fas fa-camera" style="color: var(--verde-portal); font-size: 24px;"></i><h5>📸 Olhe para a câmera</h5><small id="statusMsg">Reconhecimento automático - sem botões!</small></div>
                             <div id="camera-container">
-                                <div class="camera-area" id="cameraArea">
-                                    <div id="camera-placeholder" class="camera-placeholder" style="display: none;">
-                                        <i class="fas fa-camera"></i>
-                                        <h5>Clique para ativar a câmera</h5>
-                                        <p class="small mb-0">Permita o acesso à câmera</p>
-                                    </div>
+                                <div class="camera-area position-relative" id="cameraArea">
+                                    <div id="camera-placeholder" class="camera-placeholder"><i class="fas fa-camera"></i><h5>Clique para ativar</h5></div>
                                     <video id="video" autoplay playsinline></video>
                                     <canvas id="canvas" style="display: none;"></canvas>
-                                    <div class="camera-indicator" id="cameraIndicator" style="display: none;">
-                                        <i class="fas fa-circle"></i> Câmera ativa
-                                    </div>
+                                    <div id="cameraIndicator" class="camera-indicator" style="display: none;"><i class="fas fa-circle"></i> Reconhecendo...</div>
+                                    <div id="reconhecendoMsg" class="reconhecendo-msg" style="display: none;">🤖 Analisando rosto...</div>
                                 </div>
-                                <button id="btn-camera" class="btn-camera-moderno" style="display: none;" onclick="tirarFoto()">
-                                    <i class="fas fa-camera"></i> Tirar Foto
-                                </button>
+                                <button id="btn-camera" class="btn-camera-moderno" style="display: none;" onclick="capturarManual()"><i class="fas fa-camera"></i> Tirar Foto (manual)</button>
                             </div>
-                            
-                            <!-- Prévia da Foto -->
-                            <div id="preview" class="text-center mt-3" style="display: none;">
-                                <img id="foto-preview" class="avatar-preview">
-                                <div class="mt-3">
-                                    <button id="confirmar" class="btn-confirmar">
-                                        <i class="fas fa-check-circle"></i> Confirmar e Entrar
-                                    </button>
-                                    <button id="recarregar" class="btn btn-outline-secondary mt-2 mt-sm-0 ms-sm-2" style="border-radius: 50px; padding: 8px 20px;">
-                                        <i class="fas fa-redo"></i> Tirar Novamente
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Info Box Simplificada -->
-                        <div class="info-box-simplificado">
-                            <div class="feature-mini">
-                                <span><i class="fas fa-comment-dots"></i> Comente com sua foto</span>
-                                <span><i class="fas fa-eye"></i> "Tô só Observando"</span>
-                                <span><i class="fab fa-whatsapp"></i> Compartilhar</span>
-                            </div>
-                            <small class="text-muted">
-                                <i class="fas fa-shield-alt"></i> Sua foto é usada apenas para identificação
-                            </small>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
-    <!-- Loading -->
-    <div class="loading">
-        <div class="spinner-border text-light" role="status" style="width: 3rem; height: 3rem;">
-            <span class="visually-hidden">Carregando...</span>
+
+    <!-- Modal de confirmação para cadastro -->
+    <div class="modal fade" id="confirmarCadastroModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background: linear-gradient(135deg, #2e7d32, #1976d2); color: white;">
+                    <h5 class="modal-title"><i class="fas fa-camera"></i> Primeira vez?</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <i class="fas fa-question-circle fa-3x text-warning mb-3"></i>
+                    <p>Seu rosto ainda não foi cadastrado.<br>Deseja se cadastrar agora para poder comentar e interagir?</p>
+                    <p><small class="text-muted">Sua foto será usada apenas para identificação nos comentários.</small></p>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelarCadastro">Não, apenas visualizar</button>
+                    <button type="button" class="btn btn-success" id="btnConfirmarCadastro">Sim, quero me cadastrar</button>
+                </div>
+            </div>
         </div>
-        <p class="text-white mt-2">Verificando seu acesso...</p>
     </div>
-    
+
+    <div class="loading"><div class="spinner-border text-light" style="width:3rem;height:3rem;"></div><p class="text-white mt-2">Verificando rosto...</p></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         let video = document.getElementById('video');
         let canvas = document.getElementById('canvas');
         let context = canvas.getContext('2d');
         let stream = null;
         let cameraAtiva = false;
-        
-        // Função para converter URL do YouTube
-        function converterYoutubeUrl(url) {
-            let videoUrl = url;
-            if (videoUrl.includes('youtube.com/watch?v=')) {
-                let videoId = videoUrl.split('v=')[1];
-                let ampersandPosition = videoId.indexOf('&');
-                if (ampersandPosition !== -1) {
-                    videoId = videoId.substring(0, ampersandPosition);
-                }
-                return `https://www.youtube.com/embed/${videoId}`;
-            } else if (videoUrl.includes('youtu.be/')) {
-                let videoId = videoUrl.split('youtu.be/')[1];
-                if (videoId.includes('?')) {
-                    videoId = videoId.split('?')[0];
-                }
-                return `https://www.youtube.com/embed/${videoId}`;
-            }
-            return videoUrl;
+        let intervaloReconhecimento = null;
+        let enviando = false;
+        let jaRedirecionou = false;
+        let aguardandoDecisaoCadastro = false; // se true, para de tentar reconhecer
+        let frameAtual = null;  // guarda o último frame capturado para cadastro
+
+        function converterYoutubeUrl(url){
+            if(url.includes('youtube.com/watch?v=')){ let id = url.split('v=')[1]; if(id.includes('&')) id = id.split('&')[0]; return `https://www.youtube.com/embed/${id}`; }
+            if(url.includes('youtu.be/')){ let id = url.split('youtu.be/')[1]; if(id.includes('?')) id = id.split('?')[0]; return `https://www.youtube.com/embed/${id}`; }
+            return url;
         }
-        
-        // ATIVAR CÂMERA AUTOMATICAMENTE AO CARREGAR A PÁGINA
+
+        function carregarUltimaPostagem(){
+            fetch('/api/postagens?page=1&per_page=1').then(r=>r.json()).then(data=>{
+                const container = document.getElementById('ultima-postagem');
+                if(data.postagens && data.postagens.length>0){
+                    const post = data.postagens[0];
+                    let conteudoHtml = '';
+                    if(post.tipo === 'texto') conteudoHtml = `<div class="p-3">${escapeHtml(post.conteudo)}</div>`;
+                    else if(post.tipo === 'foto') conteudoHtml = `<div class="p-3 text-center"><img src="${post.conteudo}" style="max-width:100%; max-height:200px; border-radius:12px;"></div>`;
+                    else if(post.tipo === 'video_local') conteudoHtml = `<div class="p-3"><div class="ratio ratio-16x9"><video controls src="${post.conteudo}" style="width:100%; border-radius:12px;"></video></div></div>`;
+                    else if(post.tipo === 'video_youtube'){
+                        let videoUrl = converterYoutubeUrl(post.conteudo);
+                        conteudoHtml = `<div class="p-3"><div class="ratio ratio-16x9"><iframe src="${videoUrl}" allowfullscreen></iframe></div></div>`;
+                    }
+                    container.innerHTML = `
+                        <div class="ultima-postagem-header">
+                            <img src="${post.foto_autor}" class="ultima-postagem-avatar">
+                            <div><h4 class="ultima-postagem-titulo">${escapeHtml(post.titulo)}</h4><div class="small text-muted">${post.autor} • ${post.data} • 👁️ ${post.total_vistas}</div></div>
+                        </div>
+                        <div class="p-3 bg-light">📌 ${escapeHtml(post.resumo)}</div>
+                        ${conteudoHtml}
+                        <div class="alert-login"><i class="fas fa-lock"></i> 🔒 Faça login com seu rosto para comentar!</div>
+                    `;
+                } else {
+                    container.innerHTML = '<div class="text-center p-4"><i class="fas fa-newspaper fa-3x text-muted"></i><p>Em breve novidades</p></div>';
+                }
+            });
+        }
+
+        function escapeHtml(text){
+            if(!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function pararReconhecimento(){
+            if(intervaloReconhecimento){
+                clearInterval(intervaloReconhecimento);
+                intervaloReconhecimento = null;
+            }
+            document.getElementById('reconhecendoMsg').style.display = 'none';
+            document.getElementById('cameraIndicator').style.display = 'none';
+        }
+
+        function reiniciarReconhecimento(){
+            if(!cameraAtiva) return;
+            if(jaRedirecionou) return;
+            if(aguardandoDecisaoCadastro) return;
+            pararReconhecimento();
+            document.getElementById('reconhecendoMsg').style.display = 'block';
+            document.getElementById('cameraIndicator').style.display = 'flex';
+            intervaloReconhecimento = setInterval(() => {
+                if(!jaRedirecionou && cameraAtiva && !aguardandoDecisaoCadastro){
+                    tentarLoginAutomatico();
+                }
+            }, 2000);
+        }
+
+        function tentarLoginAutomatico(){
+            if(!video.videoWidth || !video.videoHeight) return;
+            if(enviando) return;
+            enviando = true;
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            let fotoData = canvas.toDataURL('image/jpeg', 0.7);
+            frameAtual = fotoData;
+            // Tentar login (apenas verificar existência)
+            fetch('/reconhecer', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `foto=${encodeURIComponent(fotoData)}&modo=login`
+            }).then(r => r.json()).then(data => {
+                if(data.success){
+                    jaRedirecionou = true;
+                    pararReconhecimento();
+                    window.location.href = data.redirect;
+                } else if(data.error === 'usuario_nao_existe'){
+                    // Primeira vez: para o reconhecimento e pergunta
+                    aguardandoDecisaoCadastro = true;
+                    pararReconhecimento();
+                    // Mostrar modal de confirmação
+                    const modal = new bootstrap.Modal(document.getElementById('confirmarCadastroModal'));
+                    modal.show();
+                    document.getElementById('statusMsg').innerHTML = '🔍 Rosto não identificado. Deseja se cadastrar?';
+                } else {
+                    // erro de detecção de rosto, continua tentando
+                    console.log("login falhou:", data.error);
+                }
+                enviando = false;
+            }).catch(err => {
+                console.error(err);
+                enviando = false;
+            });
+        }
+
+        function cadastrarUsuario(fotoData){
+            if(jaRedirecionou) return;
+            document.querySelector('.loading').style.display = 'block';
+            fetch('/reconhecer', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `foto=${encodeURIComponent(fotoData)}&modo=cadastrar`
+            }).then(r => r.json()).then(data => {
+                if(data.success){
+                    jaRedirecionou = true;
+                    window.location.href = data.redirect;
+                } else {
+                    alert('Erro ao cadastrar: ' + (data.error || 'Tente novamente'));
+                    document.querySelector('.loading').style.display = 'none';
+                    // Permitir nova tentativa
+                    aguardandoDecisaoCadastro = false;
+                    document.getElementById('statusMsg').innerHTML = 'Reconhecimento automático - sem botões!';
+                    reiniciarReconhecimento();
+                }
+            }).catch(err => {
+                alert('Erro na comunicação com o servidor');
+                document.querySelector('.loading').style.display = 'none';
+                aguardandoDecisaoCadastro = false;
+                reiniciarReconhecimento();
+            });
+        }
+
+        function capturarManual() {
+            if(intervaloReconhecimento) clearInterval(intervaloReconhecimento);
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            let fotoData = canvas.toDataURL('image/jpeg', 0.8);
+            // Perguntar se quer cadastrar? Melhor usar o mesmo fluxo: envia como login e se não existir pergunta
+            fetch('/reconhecer', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `foto=${encodeURIComponent(fotoData)}&modo=login`
+            }).then(r => r.json()).then(data => {
+                if(data.success){
+                    window.location.href = data.redirect;
+                } else if(data.error === 'usuario_nao_existe'){
+                    if(confirm("Rosto não cadastrado. Deseja se cadastrar agora?")){
+                        cadastrarUsuario(fotoData);
+                    }
+                } else {
+                    alert("Não foi possível detectar um rosto nítido. Tente novamente.");
+                }
+            });
+        }
+
         function ativarCameraAutomaticamente() {
             if (cameraAtiva) return;
-            
             navigator.mediaDevices.getUserMedia({ video: true })
                 .then(function(mediaStream) {
                     stream = mediaStream;
@@ -568,189 +310,41 @@
                     video.style.display = 'block';
                     document.getElementById('camera-placeholder').style.display = 'none';
                     document.getElementById('btn-camera').style.display = 'block';
-                    document.getElementById('cameraIndicator').style.display = 'block';
                     cameraAtiva = true;
+                    reiniciarReconhecimento();
                 })
                 .catch(function(err) {
-                    console.error('Erro ao acessar câmera:', err);
+                    console.error("Erro câmera:", err);
                     document.getElementById('camera-placeholder').style.display = 'block';
-                    document.getElementById('video').style.display = 'none';
-                    document.getElementById('cameraIndicator').style.display = 'none';
-                    
-                    if (err.name === 'NotAllowedError') {
-                        document.getElementById('camera-placeholder').innerHTML = `
-                            <i class="fas fa-exclamation-triangle"></i>
-                            <h5>Permissão negada</h5>
-                            <p class="small mb-0">Por favor, permita o acesso à câmera e recarregue a página</p>
-                            <button class="btn btn-sm btn-light mt-3" onclick="location.reload()">Recarregar</button>
-                        `;
-                    } else {
-                        document.getElementById('camera-placeholder').innerHTML = `
-                            <i class="fas fa-camera"></i>
-                            <h5>Clique para ativar a câmera</h5>
-                            <p class="small mb-0">${err.message}</p>
-                        `;
-                    }
-                });
-        }
-        
-        // Carregar última postagem COMPLETA
-        function carregarUltimaPostagem() {
-            fetch('/api/postagens?page=1&per_page=1')
-                .then(response => response.json())
-                .then(data => {
-                    const container = document.getElementById('ultima-postagem');
-                    if (data.postagens && data.postagens.length > 0) {
-                        const post = data.postagens[0];
-                        
-                        // Gerar conteúdo baseado no tipo
-                        let conteudoHtml = '';
-                        if (post.tipo === 'texto') {
-                            conteudoHtml = `
-                                <div class="ultima-postagem-conteudo">
-                                    <p style="font-size: 0.9rem;">${escapeHtml(post.conteudo)}</p>
-                                </div>
-                            `;
-                        } else if (post.tipo === 'foto') {
-                            conteudoHtml = `
-                                <div class="ultima-postagem-conteudo text-center">
-                                    <img src="${post.conteudo}" class="ultima-postagem-midia" alt="Imagem da postagem" style="max-height: 200px; width: auto;">
-                                </div>
-                            `;
-                        } else if (post.tipo === 'video_local') {
-                            conteudoHtml = `
-                                <div class="ultima-postagem-conteudo">
-                                    <div class="ultima-postagem-video">
-                                        <video controls>
-                                            <source src="${post.conteudo}">
-                                        </video>
-                                    </div>
-                                </div>
-                            `;
-                        } else if (post.tipo === 'video_youtube') {
-                            let videoUrl = converterYoutubeUrl(post.conteudo);
-                            conteudoHtml = `
-                                <div class="ultima-postagem-conteudo">
-                                    <div class="ultima-postagem-video">
-                                        <iframe src="${videoUrl}" 
-                                                title="YouTube video"
-                                                frameborder="0" 
-                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                                allowfullscreen>
-                                        </iframe>
-                                    </div>
-                                </div>
-                            `;
-                        }
-                        
-                        container.innerHTML = `
-                            <div class="ultima-postagem-header">
-                                <img src="${post.foto_autor}" class="ultima-postagem-avatar" alt="Admin">
-                                <div>
-                                    <h4 class="ultima-postagem-titulo">${escapeHtml(post.titulo)}</h4>
-                                    <div class="ultima-postagem-meta">
-                                        <i class="fas fa-user-shield"></i> ${post.autor} • 
-                                        <i class="far fa-calendar-alt"></i> ${post.data} •
-                                        <i class="fas fa-eye"></i> ${post.total_vistas} observando
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="ultima-postagem-resumo">
-                                <i class="fas fa-quote-left" style="color: var(--verde-portal); opacity: 0.5; font-size: 0.7rem;"></i>
-                                ${escapeHtml(post.resumo)}
-                            </div>
-                            ${conteudoHtml}
-                            <div class="alert-login">
-                                <i class="fas fa-lock cadeado-icon"></i>
-                                <strong>🔒 Coloque a cara</strong> para comentar esta postagem!
-                            </div>
-                        `;
-                    } else {
-                        container.innerHTML = `
-                            <div class="text-center p-4">
-                                <i class="fas fa-newspaper" style="font-size: 40px; color: var(--verde-portal); opacity: 0.3;"></i>
-                                <p class="mt-2 text-muted">Em breve novidades por aqui!</p>
-                                <div class="alert-login mt-2">
-                                    <i class="fas fa-lock cadeado-icon"></i>
-                                    Coloque a cara para acessar o conteúdo
-                                </div>
-                            </div>
-                        `;
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro:', error);
-                    document.getElementById('ultima-postagem').innerHTML = `
-                        <div class="text-center p-4">
-                            <i class="fas fa-newspaper" style="font-size: 40px; color: var(--verde-portal); opacity: 0.3;"></i>
-                            <p class="mt-2 text-muted">Carregando novidades...</p>
-                        </div>
+                    document.getElementById('camera-placeholder').innerHTML = `
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h5>Permissão negada</h5>
+                        <p>Por favor, permita o acesso à câmera e recarregue a página.</p>
+                        <button class="btn btn-sm btn-light mt-2" onclick="location.reload()">Recarregar</button>
                     `;
                 });
         }
-        
-        function escapeHtml(text) {
-            if (!text) return '';
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-        
-        function tirarFoto() {
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            
-            let fotoData = canvas.toDataURL('image/jpeg', 0.8);
-            document.getElementById('foto-preview').src = fotoData;
-            document.getElementById('preview').style.display = 'block';
-            video.style.display = 'none';
-            document.getElementById('btn-camera').style.display = 'none';
-            document.getElementById('camera-placeholder').style.display = 'none';
-            document.getElementById('cameraIndicator').style.display = 'none';
-            
-            if (stream) {
-                stream.getTracks().forEach(track => track.stop());
-                cameraAtiva = false;
+
+        // Eventos do modal
+        document.getElementById('btnConfirmarCadastro').onclick = function(){
+            if(frameAtual){
+                cadastrarUsuario(frameAtual);
+            } else {
+                alert("Erro: não foi possível capturar a foto. Tente novamente.");
+                aguardandoDecisaoCadastro = false;
+                document.getElementById('statusMsg').innerHTML = 'Reconhecimento automático - sem botões!';
+                reiniciarReconhecimento();
             }
-            
-            document.getElementById('confirmar').onclick = () => enviarFoto(fotoData);
-            document.getElementById('recarregar').onclick = () => {
-                location.reload();
-            };
-        }
-        
-        async function enviarFoto(fotoData) {
-            document.querySelector('.loading').style.display = 'block';
-            
-            try {
-                let response = await fetch('/reconhecer', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: 'foto=' + encodeURIComponent(fotoData)
-                });
-                
-                let result = await response.json();
-                
-                if (result.success) {
-                    window.location.href = result.redirect;
-                } else {
-                    alert('Erro: ' + result.error);
-                    document.querySelector('.loading').style.display = 'none';
-                    location.reload();
-                }
-            } catch(error) {
-                alert('Erro ao enviar foto: ' + error);
-                document.querySelector('.loading').style.display = 'none';
-            }
-        }
-        
-        // Carregar última postagem e ativar câmera automaticamente
+            bootstrap.Modal.getInstance(document.getElementById('confirmarCadastroModal')).hide();
+        };
+        document.getElementById('btnCancelarCadastro').onclick = function(){
+            aguardandoDecisaoCadastro = false;
+            document.getElementById('statusMsg').innerHTML = 'Reconhecimento automático - sem botões!';
+            reiniciarReconhecimento();
+        };
+
+        // Carregar última postagem e ativar câmera
         carregarUltimaPostagem();
-        
-        // Aguardar o DOM carregar completamente antes de ativar a câmera
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(ativarCameraAutomaticamente, 500);
         });
